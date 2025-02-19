@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>LLM WebMail</title>
+
+    <!-- Bulma CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.4/css/bulma.min.css" />
+    <!-- Font Awesome for icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+    <!-- Custom Styles -->
+    <link rel="stylesheet" href="/static/style.css" />
+</head>
+
+<body>
+    <section class="section" id="app">
+        <div class="container">
+            <h1 class="title is-flex is-align-items-center">
+                <span class="icon mr-2">
+                    <i class="fas fa-envelope"></i>
+                </span>
+                LLM WebMail
+            </h1>
+
+            <!-- Full-width Inbox Summary -->
+            <div v-if="inboxSummary && !loading" class="box has-background-success-light mb-4"
+                style="position: relative;">
+                <!-- New Summary Button -->
+                <button class="button is-small is-primary" @click="summarizeInbox"
+                    style="position: absolute; top: 10px; right: 10px;">
+                    <span class="icon">
+                        <i class="fas fa-sync-alt"></i>
+                    </span>
+                    <span>New Summary</span>
+                </button>
+                <!-- Summary Content -->
+                <strong>Inbox Summary:</strong>
+                <div v-html="renderMarkdown(inboxSummary)"></div>
+            </div>
+
+            <!-- Summarize Inbox Button -->
+            <div v-if="!inboxSummary && !loading" class="buttons mb-4">
+                <button class="button is-primary" @click="summarizeInbox">
+                    <span class="icon">
+                        <i class="fas fa-magic"></i>
+                    </span>
+                    <span>Summarize My Inbox</span>
+                </button>
+            </div>
+
+            <!-- Loading Spinner -->
+            <div v-if="loading"
+                class="box has-background-light mb-4 is-flex is-align-items-center is-justify-content-center">
+                <span class="icon is-large">
+                    <i class="fas fa-spinner fa-pulse"></i>
+                </span>
+            </div>
+
+            <!-- Email List and Details Columns -->
+            <div class="columns">
+                <!-- Left: Email list section -->
+                <div class="column is-one-third">
+                    <div class="box">
+                        <!-- Email List -->
+                        <div class="email-list">
+                            {% raw %}
+                            <div v-for="email in emails" :key="email.id" class="email-item" @click="selectEmail(email)">
+                                <strong>{{ email.sender }}</strong>
+                                <small class="has-text-grey">{{ email.date }}</small>
+                                <p>{{ email.subject }}</p>
+                            </div>
+                            {% endraw %}
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- Right: Email details section -->
+                <div class="column">
+                    {% raw %}
+                    <div v-if="selectedEmail" class="box">
+                        <h2 class="subtitle">{{ selectedEmail.subject }}</h2>
+                        <p><strong>From:</strong> {{ selectedEmail.sender }}</p>
+                        <p><small>{{ selectedEmail.date }}</small></p>
+                        <hr />
+                        <p v-html="renderMarkdown(selectedEmail.body)"></p>
+                    </div>
+                    <div v-else class="notification is-info">
+                        Select an email to view details.
+                    </div>
+                    {% endraw %}
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vue 3 -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
+    <!-- Showdown for Markdown rendering -->
+    <script src="https://cdn.jsdelivr.net/npm/showdown@2.1.0/dist/showdown.min.js"></script>
+    <!-- Custom Vue App -->
+    <script src="/static/main.js"></script>
+</body>
+
+</html>

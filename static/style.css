@@ -1,0 +1,31 @@
+.email-list {
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.email-item {
+  padding: 0.75rem;
+  border-bottom: 1px solid #ddd;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.email-item:hover {
+  background-color: #f0f8ff;
+}
+
+.has-background-success-light {
+  background-color: #e7f9e7 !important;
+}
+
+.box.mb-4 {
+  margin-bottom: 1.5rem !important;
+}
+
+.fa-spinner {
+  font-size: 2rem;
+}
+
+li, ol {
+  padding-left: 1.25rem !important;
+}
